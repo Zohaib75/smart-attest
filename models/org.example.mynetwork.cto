@@ -1,0 +1,196 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * Write your model definitions here
+ */
+
+namespace org.example.mynetwork
+
+
+// ENUMS
+enum DegreeStatus {
+  o AWAITING_APPROVAL
+  o APPROVED_BY_REGISTRAR
+  o APPROVED_BY_DEAN
+  o APPROVED
+}
+
+participant Hec identified by HecId {
+  o String HecId
+  o String email
+  o String designation
+  o String mobile regex=/^[A-z][A-z][0-9]{7}/
+  o String city
+}
+
+participant Student identified by StudentId {
+  o String StudentId
+  o String name
+  o String email
+  o String cnic regex=/^[A-z][A-z][0-9]{7}/
+
+  --> University university
+}
+
+participant University identified by UniversityId {
+  o String UniversityId
+  o String name
+  o String email
+  o String category
+  o String sector
+  o String landline regex=/^[A-z][A-z][0-9]{7}/
+  o String city
+
+  o Department[] departments 
+
+}
+
+concept Department {
+  o String DepartmentId
+  o String name 
+  --> Dean dean
+
+}
+
+abstract participant Employee identified by EmployeeId {
+  o String EmployeeId
+  o String name
+  o String email
+
+  --> University university
+}
+
+participant Issuer extends Employee{
+  
+}
+
+participant Dean extends Employee {
+  
+}
+
+participant Registrar extends Employee {
+  
+}
+
+
+
+asset Degree identified by DegreeId {
+  o String DegreeId
+  o String Description
+  o DegreeStatus status
+  o DateTime issued_Date optional
+
+  --> Issuer issuer
+  --> Student student
+  --> University university
+  --> Employee [] approval
+
+}
+
+
+/////////////Transactions
+
+transaction IssueDegree {
+
+  	--> Degree degree
+    --> Issuer issuer
+}
+
+
+transaction Check_Status {
+  o String id
+}
+
+event Check_Status_Event {
+  o DegreeStatus status
+}
+
+
+transaction Request_IBCC {
+  o String cnic
+}
+
+event Request_IBCC_Event {
+--> Student id
+}
+
+
+transaction Request_Nadra {
+  o String cnic
+}
+
+event Request_Nadra_Event {
+--> Student id
+}
+
+// transaction Add_Department {
+
+//   --> University  uni
+//   o   Department   department
+  
+// }
+
+// event Add_Department_Event {
+
+//   --> University  uni
+//   o   Department   department   
+// }
+
+
+transaction Request_Attest_Degree {
+
+  --> Degree  degree
+ 
+}
+
+event Request_Attest_Degree_Event {
+
+ o DegreeStatus status
+  
+}
+
+
+
+transaction Approve {
+  --> Degree degree
+  --> Employee approvingParty
+}
+
+event Approve_Event {
+  --> Degree   degree
+  --> Employee approvingParty
+}
+
+
+
+
+
+
+
+
+
+// transaction Request_Updation {
+
+//   --> University  uni
+//   o   Department  department 
+  
+// }
+
+// event Request_Updation_Event {
+
+//   --> University  uni
+//   o   Department  department   
+// }
+

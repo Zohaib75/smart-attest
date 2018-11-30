@@ -1,0 +1,189 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * Sample access control list.
+ */
+
+
+
+rule HecCanDoAllUni {
+	description: "Hec can do everything with universities"
+  	participant: "org.example.mynetwork.Hec"
+  	operation: ALL
+    resource: "org.example.mynetwork.University"
+  	action: ALLOW
+}
+
+
+rule studentCanSeeOwnAssets { 
+	  description: "Students can see their own assets"
+  	participant(p): "org.example.mynetwork.Student"
+  	operation: READ
+    resource(r): "org.example.mynetwork.Degree"
+    condition: (p.getIdentifier() === r.student.getIdentifier() )
+  	action: ALLOW
+}
+
+rule studentCanSeeStudent { 
+	  description: "Students can see themselves"
+  	participant(p): "org.example.mynetwork.Student"
+  	operation: READ
+    resource(r): "org.example.mynetwork.Student"
+    condition: (p.getIdentifier() === r.getIdentifier() )
+  	action: ALLOW
+}
+
+rule uniCanSeeuni { 
+	  description: "Universities can see only their own uni"
+  	participant(p): "org.example.mynetwork.University"
+  	operation: READ
+    resource(r): "org.example.mynetwork.University"
+    condition: (p.getIdentifier() === r.getIdentifier() )
+  	action: ALLOW
+}
+
+rule uniCanSeeStudents { 
+	  description: "Universities can see only their own Students"
+  	participant(p): "org.example.mynetwork.University"
+  	operation: READ
+    resource(r): "org.example.mynetwork.Student"
+    condition: (p.getIdentifier() === r.university.getIdentifier() )
+  	action: ALLOW
+}
+
+rule UnisDean { 
+	description: "Universities can CRUD only their Dean"
+  	participant(p): "org.example.mynetwork.University"
+  	operation: ALL
+    resource(r): "org.example.mynetwork.Dean"
+    condition: (p.getIdentifier() === r.university.getIdentifier() )
+  	action: ALLOW
+}
+
+rule UnisIssuer { 
+	description: "Universities can CRUD only their Issuer"
+  	participant(p): "org.example.mynetwork.University"
+  	operation: ALL
+    resource(r): "org.example.mynetwork.Dean"
+    condition: (p.getIdentifier() === r.university.getIdentifier() )
+  	action: ALLOW
+}
+
+rule UnisRegistrar { 
+	description: "Universities can CRUD only their Registrar"
+  	participant(p): "org.example.mynetwork.University"
+  	operation: ALL
+    resource(r): "org.example.mynetwork.Registrar"
+    condition: (p.getIdentifier() === r.university.getIdentifier() )
+  	action: ALLOW
+}
+
+rule uniCanSeeDegrees { 
+	  description: "Universities can see only Degree issued by their Uni"
+  	participant(p): "org.example.mynetwork.University"
+  	operation: READ
+    resource(r): "org.example.mynetwork.Degree"
+    condition: (p.getIdentifier() === r.university.getIdentifier() )
+  	action: ALLOW
+}
+
+
+rule DeanCanSee {
+	description: "Dean can see themself"
+  	participant(p): "org.example.mynetwork.Dean"
+  	operation: READ
+    resource(r): "org.example.mynetwork.Dean"
+    condition: (p.getIdentifier() === r.getIdentifier() )
+  	action: ALLOW
+}
+
+rule deanDegree {
+	description: "Dean Uni Degree"
+  	participant(p): "org.example.mynetwork.Dean"
+  	operation: READ,UPDATE
+    resource(r): "org.example.mynetwork.Degree"
+  	condition: (p.university.getIdentifier() === r.university.getIdentifier() )
+  	action: ALLOW
+}
+
+rule dean {
+	description: "Dean Approval"
+  	participant: "org.example.mynetwork.Dean"
+  	operation: CREATE
+    resource: "org.example.mynetwork.Approve"
+    action: ALLOW
+}
+
+rule RegistrarCanSee {
+	description: "Registrar can see themself"
+  	participant(p): "org.example.mynetwork.Registrar"
+  	operation: READ
+    resource(r): "org.example.mynetwork.Registrar"
+    condition: (p.getIdentifier() === r.getIdentifier() )
+  	action: ALLOW
+}
+
+rule RegistrarCanAddStudents {
+	description: "Only Registrar can CRUD Students of his University"
+  	participant(p): "org.example.mynetwork.Registrar"
+  	operation: ALL
+    resource(r): "org.example.mynetwork.Student"
+    condition: (p.university.getIdentifier() === r.university.getIdentifier() )
+  	action: ALLOW
+}
+
+rule IssuercanSee {
+	description: "Issuer can see themselves"
+  	participant(p): "org.example.mynetwork.Issuer"
+  	operation: READ
+    resource(r): "org.example.mynetwork.Issuer"
+    condition: (p.getIdentifier() === r.getIdentifier() )
+  	action: ALLOW
+}
+rule IssuercanIssueDegree {
+	description: "Issuer can issue degree"
+  	participant(p): "org.example.mynetwork.Issuer"
+  	operation: ALL
+    resource(r): "org.example.mynetwork.Degree"
+    condition: ( p.getIdentifier() === r.issuer.getIdentifier() && p.university.getIdentifier() === r.university.getIdentifier() )
+  	action: ALLOW
+}
+
+
+
+
+rule SystemACL {
+  description:  "System ACL to permit all access"
+  participant: "org.hyperledger.composer.system.Participant"
+  operation: ALL
+  resource: "org.hyperledger.composer.system.**"
+  action: ALLOW
+}
+
+rule NetworkAdminUser {
+    description: "Grant business network administrators full access to user resources"
+    participant: "org.hyperledger.composer.system.NetworkAdmin"
+    operation: ALL
+    resource: "**"
+    action: ALLOW
+}
+
+rule NetworkAdminSystem {
+    description: "Grant business network administrators full access to system resources"
+    participant: "org.hyperledger.composer.system.NetworkAdmin"
+    operation: ALL
+    resource: "org.hyperledger.composer.system.**"
+    action: ALLOW
+}
