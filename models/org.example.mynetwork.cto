@@ -31,7 +31,7 @@ participant Hec identified by HecId {
   o String HecId
   o String email
   o String designation
-  o String mobile regex=/^[A-z][A-z][0-9]{7}/
+  o String mobile 
   o String city
 }
 
@@ -39,9 +39,15 @@ participant Student identified by StudentId {
   o String StudentId
   o String name
   o String email
-  o String cnic regex=/^[A-z][A-z][0-9]{7}/
+  o String cnic 
+  o String mobile
+
+  o Double matric
+  o Double inter
 
   --> University university
+  --> Department department
+
 }
 
 participant University identified by UniversityId {
@@ -50,18 +56,16 @@ participant University identified by UniversityId {
   o String email
   o String category
   o String sector
-  o String landline regex=/^[A-z][A-z][0-9]{7}/
+  o String landline 
   o String city
 
-  o Department[] departments 
 
 }
 
-concept Department {
+asset Department identified by DepartmentId {
   o String DepartmentId
   o String name 
-  --> Dean dean
-
+  --> University university
 }
 
 abstract participant Employee identified by EmployeeId {
@@ -73,11 +77,14 @@ abstract participant Employee identified by EmployeeId {
 }
 
 participant Issuer extends Employee{
+
+  --> Department department
   
 }
 
 participant Dean extends Employee {
-  
+
+  --> Department department
 }
 
 participant Registrar extends Employee {
@@ -94,7 +101,6 @@ asset Degree identified by DegreeId {
 
   --> Issuer issuer
   --> Student student
-  --> University university
   --> Employee [] approval
 
 }
@@ -104,17 +110,37 @@ asset Degree identified by DegreeId {
 
 transaction IssueDegree {
 
-  	--> Degree degree
-    --> Issuer issuer
+  o String DegreeId
+  o String Description
+  o DateTime issued_Date 
+
+  --> Student student
+}
+
+event IssueDegree_Event {
+  --> Degree   degree
+ 
 }
 
 
-transaction Check_Status {
-  o String id
+transaction Approve {
+  --> Degree degree
+
 }
 
-event Check_Status_Event {
-  o DegreeStatus status
+event Approve_Event {
+  --> Degree   degree
+
+}
+
+transaction HecApprove {
+  --> Degree degree
+
+}
+
+event HecApprove_Event {
+  --> Degree   degree
+
 }
 
 
@@ -126,7 +152,6 @@ event Request_IBCC_Event {
 --> Student id
 }
 
-
 transaction Request_Nadra {
   o String cnic
 }
@@ -135,51 +160,80 @@ event Request_Nadra_Event {
 --> Student id
 }
 
-// transaction Add_Department {
+////// Add Transactions
 
-//   --> University  uni
-//   o   Department   department
+
+transaction Add_Student {
+
+  o String StudentId
+  o String cnic 
   
+  o String department
+}
+
+
+event Add_Student_Event {
+
+ --> Student student
+
+}
+
+
+transaction Add_Department {
+
+  o String DepartmentId
+  o String name 
+  --> University university
+}
+
+event Add_Department_Event {
+
+ --> Department department
+
+}
+
+
+transaction Add_Dean {
+
+  o String id
+  o String name
+  o String email
+
+  --> University university
+  --> Department department
+
+}
+
+event Add_Dean_Event {
+
+ --> Dean dean
+}
+
+transaction Add_Issuer {
+
+  o String id
+  o String name
+  o String email
+
+  --> University university
+  --> Department department
+
+}
+
+event Add_Issuer_Event {
+
+ --> Issuer issuer
+
+}
+
+
+// transaction Check_Status {
+//   o String id
 // }
 
-// event Add_Department_Event {
-
-//   --> University  uni
-//   o   Department   department   
+// event Check_Status_Event {
+//   o DegreeStatus status
 // }
-
-
-transaction Request_Attest_Degree {
-
-  --> Degree  degree
- 
-}
-
-event Request_Attest_Degree_Event {
-
- o DegreeStatus status
-  
-}
-
-
-
-transaction Approve {
-  --> Degree degree
-  --> Employee approvingParty
-}
-
-event Approve_Event {
-  --> Degree   degree
-  --> Employee approvingParty
-}
-
-
-
-
-
-
-
-
 
 // transaction Request_Updation {
 
@@ -193,4 +247,3 @@ event Approve_Event {
 //   --> University  uni
 //   o   Department  department   
 // }
-

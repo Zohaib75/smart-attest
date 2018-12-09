@@ -26,6 +26,39 @@ rule HecCanDoAllUni {
   	action: ALLOW
 }
 
+rule HecSeeOwn {
+	description: "Hec can see themselves"
+  	participant: "org.example.mynetwork.Hec"
+  	operation: READ
+    resource: "org.example.mynetwork.Hec"
+  	action: ALLOW
+}
+
+rule HecCanDepartment {
+	description: "Hec can CRUD department"
+  	participant: "org.example.mynetwork.Hec"
+  	operation: ALL
+    resource: "org.example.mynetwork.Department"
+  	action: ALLOW
+    
+}
+
+
+rule HecDegree {
+	description: "Hec can read and update degrees"
+  	participant: "org.example.mynetwork.Hec"
+  	operation: READ,UPDATE
+    resource: "org.example.mynetwork.Degree"
+  	action: ALLOW
+}
+
+rule HecApproval {
+	description: "Registrar Approval"
+  	participant: "org.example.mynetwork.Hec"
+  	operation: CREATE
+    resource: "org.example.mynetwork.HecApprove"
+    action: ALLOW
+}
 
 rule studentCanSeeOwnAssets { 
 	  description: "Students can see their own assets"
@@ -76,7 +109,7 @@ rule UnisIssuer {
 	description: "Universities can CRUD only their Issuer"
   	participant(p): "org.example.mynetwork.University"
   	operation: ALL
-    resource(r): "org.example.mynetwork.Dean"
+    resource(r): "org.example.mynetwork.Issuer"
     condition: (p.getIdentifier() === r.university.getIdentifier() )
   	action: ALLOW
 }
@@ -109,22 +142,48 @@ rule DeanCanSee {
   	action: ALLOW
 }
 
+rule dean2 {
+  	description: "Dean can see students of his uni and department"
+  	participant(p): "org.example.mynetwork.Dean"
+  	operation: READ
+    resource(r): "org.example.mynetwork.Student"
+    condition: (p.university.getIdentifier() === r.university.getIdentifier() && p.department.getIdentifier() === r.department.getIdentifier() )
+  	action: ALLOW
+}
 rule deanDegree {
-	description: "Dean Uni Degree"
+	description: "Dean can update own Uni Degree"
   	participant(p): "org.example.mynetwork.Dean"
   	operation: READ,UPDATE
     resource(r): "org.example.mynetwork.Degree"
-  	condition: (p.university.getIdentifier() === r.university.getIdentifier() )
+  	condition: (p.university.getIdentifier() === r.student.university.getIdentifier() && p.department.getIdentifier() === r.student.department.getIdentifier())
   	action: ALLOW
 }
 
-rule dean {
+rule deanApproval {
 	description: "Dean Approval"
   	participant: "org.example.mynetwork.Dean"
   	operation: CREATE
     resource: "org.example.mynetwork.Approve"
     action: ALLOW
 }
+
+rule registrarDegree {
+	description: "Registrar own Uni Degree"
+  	participant(p): "org.example.mynetwork.Registrar"
+  	operation: READ,UPDATE
+    resource(r): "org.example.mynetwork.Degree"
+  	condition: (p.university.getIdentifier() === r.student.university.getIdentifier() )
+  	action: ALLOW
+}
+
+rule registartApproval {
+	description: "Registrar Approval"
+  	participant: "org.example.mynetwork.Registrar"
+  	operation: CREATE
+    resource: "org.example.mynetwork.Approve"
+    action: ALLOW
+}
+
 
 rule RegistrarCanSee {
 	description: "Registrar can see themself"
@@ -152,12 +211,31 @@ rule IssuercanSee {
     condition: (p.getIdentifier() === r.getIdentifier() )
   	action: ALLOW
 }
+rule IssuercanSeeStuds{
+
+  	description: "Issuer can see Students of his Department"
+  	participant(p): "org.example.mynetwork.Issuer"
+  	operation: READ
+    resource(r): "org.example.mynetwork.Student"
+    condition: (p.university.getIdentifier() === r.university.getIdentifier() && p.department.getIdentifier() === r.department.getIdentifier())
+  	action: ALLOW
+
+}
 rule IssuercanIssueDegree {
 	description: "Issuer can issue degree"
   	participant(p): "org.example.mynetwork.Issuer"
   	operation: ALL
     resource(r): "org.example.mynetwork.Degree"
-    condition: ( p.getIdentifier() === r.issuer.getIdentifier() && p.university.getIdentifier() === r.university.getIdentifier() )
+    condition: ( p.getIdentifier() === r.issuer.getIdentifier() && p.university.getIdentifier() === r.student.university.getIdentifier() && p.department.getIdentifier() === r.student.department.getIdentifier())
+  	action: ALLOW
+}
+
+rule IssuercanIssueDegree2 {
+	description: "Issuer can issue using transaction Issue Degree "
+  	participant(p): "org.example.mynetwork.Issuer"
+  	operation: ALL
+    resource(r): "org.example.mynetwork.IssueDegree"
+    condition: (  p.university.getIdentifier() === r.student.university.getIdentifier() && p.department.getIdentifier() === r.student.department.getIdentifier())
   	action: ALLOW
 }
 
