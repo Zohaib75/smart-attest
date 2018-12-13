@@ -36,11 +36,17 @@ participant Hec identified by HecId {
 }
 
 participant Student identified by StudentId {
+  
   o String StudentId
-  o String name
-  o String email
+
   o String cnic 
+  
+  o String name
+  o String Father_name
+  o String Address
+  o String email
   o String mobile
+  o String city
 
   o Double matric
   o Double inter
@@ -143,21 +149,31 @@ event HecApprove_Event {
 
 }
 
+concept IBCC_Concept {
+ 
+  o Double matric
+  o Double inter
+}
 
+@returns(IBCC_Concept)
 transaction Request_IBCC {
   o String cnic
 }
 
-event Request_IBCC_Event {
---> Student id
+concept NADRA_Concept {
+   
+  o String name
+  o String Father_name
+  o String Address
+  o String email
+  o String mobile
+  o String city
+
 }
 
+@returns(NADRA_Concept)
 transaction Request_Nadra {
   o String cnic
-}
-
-event Request_Nadra_Event {
---> Student id
 }
 
 ////// Add Transactions
@@ -165,10 +181,25 @@ event Request_Nadra_Event {
 
 transaction Add_Student {
 
+   
   o String StudentId
+
   o String cnic 
   
-  o String department
+  o String name
+  o String Father_name
+  o String Address
+  o String email
+  o String mobile
+  o String city
+
+  o Double matric
+  o Double inter
+
+
+  --> Department department
+
+
 }
 
 

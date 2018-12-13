@@ -202,7 +202,22 @@ rule RegistrarCanAddStudents {
     condition: (p.university.getIdentifier() === r.university.getIdentifier() )
   	action: ALLOW
 }
+rule RegistrarCanAddStudents2 {
+	  description: "Only Registrar can CRUD Students of his University"
+  	participant: "org.example.mynetwork.Registrar"
+  	operation: ALL
+    resource: "org.example.mynetwork.Add_Student"
+    action: ALLOW
+}
 
+rule RegistrarCanSeeDepartments{
+    
+    description: "Registrar can See Departments of his University"
+  	participant: "org.example.mynetwork.Registrar"
+  	operation: READ
+    resource: "org.example.mynetwork.Department"
+    action: ALLOW
+}
 rule IssuercanSee {
 	description: "Issuer can see themselves"
   	participant(p): "org.example.mynetwork.Issuer"
