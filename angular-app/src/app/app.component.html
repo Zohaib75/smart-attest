@@ -1,0 +1,77 @@
+<!--
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <!-- <p class="network-name">smart-attest@0.0.3-deploy.76.bna</p> -->
+        <p class="navbar-brand">Smart-Attest-app</p>
+      </div>
+      <ul class="nav navbar-nav">
+        <li class="dropdown active">
+            <a class="dropdown-toggle" data-toggle="dropdown">Assets</a>
+            <ul class="dropdown-menu scrollable-menu">
+              
+              <li><a [routerLink]="['/Department']">Department</a></li>
+              
+              <li><a [routerLink]="['/Degree']">Degree</a></li>
+              
+            </ul>
+        </li>
+        <li class="dropdown active">
+          <a class="dropdown-toggle" data-toggle="dropdown">Participants</a>
+          <ul class="dropdown-menu scrollable-menu">
+            
+            <li><a [routerLink]="['/Hec']">Hec</a></li>
+            
+            <li><a [routerLink]="['/Student']">Student</a></li>
+            
+            <li><a [routerLink]="['/University']">University</a></li>
+            
+            <li><a [routerLink]="['/Issuer']">Issuer</a></li>
+            
+            <li><a [routerLink]="['/Dean']">Dean</a></li>
+            
+            <li><a [routerLink]="['/Registrar']">Registrar</a></li>
+            
+          </ul>
+      </li>
+      <li class="dropdown active">
+        <a class="dropdown-toggle" data-toggle="dropdown">Transactions</a>
+        <ul class="dropdown-menu scrollable-menu">
+          
+          <li><a [routerLink]="['/IssueDegree']">IssueDegree</a></li>
+          
+          <li><a [routerLink]="['/Approve']">Approve</a></li>
+          
+          <li><a [routerLink]="['/HecApprove']">HecApprove</a></li>
+          
+          <li><a [routerLink]="['/Request_IBCC']">Request_IBCC</a></li>
+          
+          <li><a [routerLink]="['/Request_Nadra']">Request_Nadra</a></li>
+          
+          <li><a [routerLink]="['/Add_Student']">Add_Student</a></li>
+          
+          <li><a [routerLink]="['/Add_Department']">Add_Department</a></li>
+          
+          <li><a [routerLink]="['/Add_Dean']">Add_Dean</a></li>
+          
+          <li><a [routerLink]="['/Add_Issuer']">Add_Issuer</a></li>
+          
+        </ul>
+    </li>
+      </ul>
+    </div>
+  </nav>
+  
+  <router-outlet></router-outlet>
