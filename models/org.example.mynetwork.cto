@@ -110,13 +110,10 @@ asset Degree identified by DegreeId {
   --> Employee [] approval
 
 }
-
-
 /////////////Transactions
 
 transaction IssueDegree {
 
-  o String DegreeId
   o String Description
   o DateTime issued_Date 
 
@@ -181,9 +178,6 @@ transaction Request_Nadra {
 
 transaction Add_Student {
 
-   
-  o String StudentId
-
   o String cnic 
   
   o String name
@@ -212,7 +206,6 @@ event Add_Student_Event {
 
 transaction Add_Department {
 
-  o String DepartmentId
   o String name 
   --> University university
 }
@@ -226,7 +219,6 @@ event Add_Department_Event {
 
 transaction Add_Dean {
 
-  o String id
   o String name
   o String email
 
