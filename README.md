@@ -1,3 +1,5 @@
 # smart-attest
 
-FYP Project
+Installation Guide
+
+1.  Major dependencies includes Docker, Docker-composer, 

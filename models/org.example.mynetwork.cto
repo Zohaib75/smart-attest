@@ -78,6 +78,7 @@ abstract participant Employee identified by EmployeeId {
   o String EmployeeId
   o String name
   o String email
+  o String landline
 
   --> University university
 }
@@ -221,8 +222,8 @@ transaction Add_Dean {
 
   o String name
   o String email
+  o String landline
 
-  --> University university
   --> Department department
 
 }
@@ -234,11 +235,11 @@ event Add_Dean_Event {
 
 transaction Add_Issuer {
 
-  o String id
   o String name
   o String email
+  o String landline
 
-  --> University university
+
   --> Department department
 
 }

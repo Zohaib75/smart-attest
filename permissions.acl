@@ -43,6 +43,15 @@ rule HecCanDepartment {
     
 }
 
+rule HecCanDepartment2 {
+	description: "Hec can CRUD department"
+  	participant: "org.example.mynetwork.Hec"
+  	operation: ALL
+    resource: "org.example.mynetwork.Add_Department"
+  	action: ALLOW
+    
+}
+
 
 rule HecDegree {
 	description: "Hec can read and update degrees"
@@ -105,6 +114,15 @@ rule UnisDean {
   	action: ALLOW
 }
 
+rule UnisDean2 { 
+	description: "Universities can CRUD only their Dean"
+  	participant: "org.example.mynetwork.University"
+  	operation: ALL
+    resource: "org.example.mynetwork.Add_Dean"
+  	action: ALLOW
+}
+
+
 rule UnisIssuer { 
 	description: "Universities can CRUD only their Issuer"
   	participant(p): "org.example.mynetwork.University"
@@ -112,6 +130,23 @@ rule UnisIssuer {
     resource(r): "org.example.mynetwork.Issuer"
     condition: (p.getIdentifier() === r.university.getIdentifier() )
   	action: ALLOW
+}
+
+rule uniDegree{
+  description: "Universities can See their degrees"
+  	participant(p): "org.example.mynetwork.University"
+  	operation: READ
+    resource(r): "org.example.mynetwork.Degree"
+    condition: (p.getIdentifier() === r.university.getIdentifier() )
+  	action: ALLOW
+}
+
+rule UnisIssuer2 { 
+	description: "Universities can CRUD only their Issuer"
+  	participant: "org.example.mynetwork.University"
+  	operation: ALL
+    resource: "org.example.mynetwork.Add_Issuer"
+   	action: ALLOW
 }
 
 rule UnisRegistrar { 
@@ -128,6 +163,14 @@ rule uniCanSeeDegrees {
   	participant(p): "org.example.mynetwork.University"
   	operation: READ
     resource(r): "org.example.mynetwork.Degree"
+    condition: (p.getIdentifier() === r.issuer.university.getIdentifier() )
+  	action: ALLOW
+}
+rule uniCanSeeDepartment { 
+	  description: "Universities can see only Department issued by their Uni"
+  	participant(p): "org.example.mynetwork.University"
+  	operation: READ
+    resource(r): "org.example.mynetwork.Department"
     condition: (p.getIdentifier() === r.university.getIdentifier() )
   	action: ALLOW
 }
