@@ -104,8 +104,9 @@ asset Degree identified by DegreeId {
   o String DegreeId
   o String Description
   o DegreeStatus status
-  o DateTime issued_Date optional
+  o DateTime issued_Date 
 
+  --> University university
   --> Issuer issuer
   --> Student student
   --> Employee [] approval

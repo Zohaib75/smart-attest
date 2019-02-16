@@ -83,7 +83,7 @@ const   insertDoc = (db) => {
     })
   }
 
-  flag = true;
+  flag = false;
   
 
 mongodb.MongoClient.connect(url, { useNewUrlParser: true },(error, db) => {

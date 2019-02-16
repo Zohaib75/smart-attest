@@ -1,10 +1,9 @@
 #!/bin/bash
-composer archive create -t dir -n .
 
-composer network install --card PeerAdmin@hlfv1 --archiveFile smart-attest@0.0.3-deploy.77.bna
-composer network start --networkName smart-attest --networkVersion 0.0.3-deploy.77 --networkAdmin admin --networkAdminEnrollSecret adminpw --card PeerAdmin@hlfv1 --file networkadmin.card
+composer network install --card PeerAdmin@hlfv1 --archiveFile smart-attest@0.0.3-deploy.79.bna
+composer network start --networkName smart-attest --networkVersion 0.0.3-deploy.79 --networkAdmin admin --networkAdminEnrollSecret adminpw --card PeerAdmin@hlfv1 --file networkadmin.card
 composer card delete --card admin@smart-attest
 composer card import --file networkadmin.card
 composer network ping --card admin@smart-attest
 
-composer-rest-server -c admin@smart-attest -w true -n never
+composer-rest-server -c admin@smart-attest -w true -n never -p 3000 

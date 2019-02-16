@@ -33,6 +33,14 @@ rule HecSeeOwn {
     resource: "org.example.mynetwork.Hec"
   	action: ALLOW
 }
+rule HecSeeStudents {
+	description: "Hec can see themselves"
+  	participant: "org.example.mynetwork.Hec"
+  	operation: READ
+    resource: "org.example.mynetwork.Student"
+  	action: ALLOW
+}
+
 
 rule HecCanDepartment {
 	description: "Hec can CRUD department"
@@ -184,6 +192,25 @@ rule DeanCanSee {
     condition: (p.getIdentifier() === r.getIdentifier() )
   	action: ALLOW
 }
+rule DeanCanSeeDepartments{
+    
+    description: "Registrar can See Departments of his University"
+  	participant(p): "org.example.mynetwork.Dean"
+  	operation: READ
+    resource(r): "org.example.mynetwork.Department"
+    condition: (p.university.getIdentifier() === r.university.getIdentifier() )
+    action: ALLOW
+}
+
+rule DeanCanSeeIssuer{
+    
+    description: "Registrar can See Departments of his University"
+  	participant(p): "org.example.mynetwork.Dean"
+  	operation: READ
+    resource(r): "org.example.mynetwork.Issuer"
+    condition: (p.university.getIdentifier() === r.university.getIdentifier() )
+    action: ALLOW
+}
 
 rule dean2 {
   	description: "Dean can see students of his uni and department"
@@ -256,11 +283,33 @@ rule RegistrarCanAddStudents2 {
 rule RegistrarCanSeeDepartments{
     
     description: "Registrar can See Departments of his University"
-  	participant: "org.example.mynetwork.Registrar"
+  	participant(p): "org.example.mynetwork.Registrar"
   	operation: READ
-    resource: "org.example.mynetwork.Department"
+    resource(r): "org.example.mynetwork.Department"
+    condition: (p.university.getIdentifier() === r.university.getIdentifier() )
     action: ALLOW
 }
+
+rule RegistrarCanSeeDean{
+    
+    description: "Registrar can See Departments of his University"
+  	participant(p): "org.example.mynetwork.Registrar"
+  	operation: READ
+    resource(r): "org.example.mynetwork.Dean"
+    condition: (p.university.getIdentifier() === r.university.getIdentifier() )
+    action: ALLOW
+}
+
+rule RegistrarCanSeeIssuer{
+    
+    description: "Registrar can See Departments of his University"
+  	participant(p): "org.example.mynetwork.Registrar"
+  	operation: READ
+    resource(r): "org.example.mynetwork.Issuer"
+    condition: (p.university.getIdentifier() === r.university.getIdentifier() )
+    action: ALLOW
+}
+
 rule IssuercanSee {
 	description: "Issuer can see themselves"
   	participant(p): "org.example.mynetwork.Issuer"
@@ -269,6 +318,27 @@ rule IssuercanSee {
     condition: (p.getIdentifier() === r.getIdentifier() )
   	action: ALLOW
 }
+
+rule IssuerCanSeeDepartments{
+    
+    description: "Registrar can See Departments of his University"
+  	participant(p): "org.example.mynetwork.Issuer"
+  	operation: READ
+    resource(r): "org.example.mynetwork.Department"
+    condition: (p.university.getIdentifier() === r.university.getIdentifier() )
+    action: ALLOW
+}
+
+rule IssuerCanSeeDean{
+    
+    description: "Registrar can See Departments of his University"
+  	participant(p): "org.example.mynetwork.Issuer"
+  	operation: READ
+    resource(r): "org.example.mynetwork.Dean"
+    condition: (p.university.getIdentifier() === r.university.getIdentifier() )
+    action: ALLOW
+}
+
 rule IssuercanSeeStuds{
 
   	description: "Issuer can see Students of his Department"

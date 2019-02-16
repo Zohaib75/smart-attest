@@ -44,22 +44,37 @@ mongodb.MongoClient.connect(url, { useNewUrlParser: true },(error, db) => {
 
 var middlware_hasRoleAdmin = HasRole(db); //define router only once
 
+app.get('/all', middlware_hasRoleAdmin, (req, res) => {
+
+    req.data.collection('user-data').find({}).toArray((err, result)=>{
+        if (error)        
+        res.status(404).json(error)
+
+        else
+        res.status(200).json(result)
+        
+    })
+
+})
+
 app.get( '/secret',middlware_hasRoleAdmin, (req, res)=>{
 
     req.data.collection('user-data').find({secretKey: req.query.secret} ,{sort: {_id :-1}}).toArray( (error, user) =>{
 
         if (error)        
-        res.status(200).json(error)
+        res.status(404).json(error)
 
         else if(user.length === 0){
-            res.status(200).json("failure")
+            res.status(404).json("failure")
         }
         else{
 
-            console.log(user[0].user)
-            let id = user[0].user;
+            let obj = {
+                id: user[0].id,
+                type: user[0].type
+            }
 
-            res.status(200).json(id)
+            res.status(200).json(obj)
         
         }
 
@@ -71,7 +86,8 @@ app.get( '/secret',middlware_hasRoleAdmin, (req, res)=>{
 //while creating a user
 app.post('/user', middlware_hasRoleAdmin, (req, res) => {
 
-    let {user} = req.body
+    let id = req.body.id;
+    let type = req.body.type;
 
     const myAwesomeDB = db.db('auth')
     const collection = myAwesomeDB.collection('user-data')
@@ -84,7 +100,8 @@ app.post('/user', middlware_hasRoleAdmin, (req, res) => {
 
     let obj = { 
         secretKey: hash, 
-        user:    user,
+        id,
+        type
      }
 
     collection.insertOne(obj, (error, result) => {
