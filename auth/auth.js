@@ -105,6 +105,7 @@ app.post('/user', middlware_hasRoleAdmin, (req, res) => {
      }
 
     collection.insertOne(obj, (error, result) => {
+        
   
       if (error) return error
 
