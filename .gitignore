@@ -1,3 +1,4 @@
 node_modules/
 auth_start.sh
 envvars.txt
+package-lock.json/
